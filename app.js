@@ -5,15 +5,14 @@ const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 
-//DB Setting
-mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://OschA:qlqjs123@ds117965.mlab.com:17965/my-rest-api", { useMongoClient: true });
-const db = mongoose.connection;
+//DB Settings
+mongoose.connect("mongodb://oscha:qlqjs123@ds127894.mlab.com:27894/online-db-oscha", { useMongoClient: true });
+var db = mongoose.connection;
 db.once("open", function(){
- console.log("DB connected");
+	console.log("DB Connected");
 });
 db.on("error", function(err){
- console.log("DB ERROR : ", err);
+	console.log("DB Error");
 });
 
 //Other Settings
@@ -28,9 +27,9 @@ app.use(function (req, res, next) {
 });
 
 //Routes
-app.use("/posts", require("./routes/posts"));
+app.use("/users", require("./routes/users"));
 
 //Server
-app.listen(process.env.PORT, function(){
+app.listen(8080, function(){
  console.log("server on!");
 });

@@ -9,5 +9,5 @@ var RelationSchema = mongoose.Schema({
 });
 
 //model&export
-var User = mongoose.model("ScheduleUser", UserSchema);
-module.exports = User;
+var Relation = mongoose.model("Relations", RelationSchema);
+module.exports = Relation;

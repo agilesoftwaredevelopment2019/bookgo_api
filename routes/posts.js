@@ -109,13 +109,15 @@ router.post("/", function(req, res){
     //army(sadan) - find from div1 ~ div
 });
 
+
 router.post("/contents", function(req, res){
   //get detailForm and submit
   //div
   if (true) {
     var options = {
         method: 'POST',
-        url: 'http://www.army.mil.kr/iletter/emsWrite.do?recruit_idx=267073',
+        //FIXME - using req.body get recruit_idix
+        url: 'http://www.army.mil.kr/iletter/emsWrite.do?recruit_idx=262984',
         headers:{
           'cache-control': 'no-cache',
           'content-type': 'application/x-www-form-urlencoded'
@@ -128,11 +130,20 @@ router.post("/contents", function(req, res){
         console.log('request finish');
         var $ = cheerio.load(body);
         var doc = $('form[name=detailForm]');
-        var writer = $('.d7')
-        $('.d7').
-        var textValue = $('.d7');
-        console.log(textValue.html());
-        res.send(doc.html());
+        //input writer, pw, title, contents into the html
+        $('#writer').val(req.body.Writer);
+        $('#pw').val(req.body.Password);
+        $('#title').val(req.body.Title);
+        $('#contents').val("언제나 좋은 하루 되셨으면 좋겠습니다.");
+
+
+       // doc.action = "http://www.army.mil.kr/iletter/emsWriteProc.do"
+
+
+       //FIXME - send data
+
+
+        res.send(doc.toString());
       });
   }
 });

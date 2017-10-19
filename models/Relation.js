@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 //schema
 var RelationSchema = mongoose.Schema({
-	idname:{type:String, required:true},
+	uid:{type:Number, required:true},
 	eid:{type:Number, required:true}
 });
 

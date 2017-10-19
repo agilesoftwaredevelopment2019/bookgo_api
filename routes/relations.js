@@ -14,8 +14,8 @@ router.get("/", function(req, res){
 });
 
 //find relation by idname
-router.get("/idname/:idname", function(req, res){
-  Relation.find({idname:req.params.idname}, function(err, db_dt){
+router.get("/uid/:uid", function(req, res){
+  Relation.find({uid:req.params.uid}, function(err, db_dt){
     if(err)
       res.json(err);
     else{
@@ -25,6 +25,7 @@ router.get("/idname/:idname", function(req, res){
         res.json();
       }
       else{
+        console.log("eid", db_dt);
         res.json(db_dt);
       }
     }
@@ -52,7 +53,6 @@ router.get("/eid/:eid", function(req, res){
 //create
 router.post("/", function(req, res){
   Relation.create({idname:req.body.idname, eid:req.body.eid}, function(err, relation){
-    console.log("in");
     if(err)
       res.json(err);
     else
@@ -72,8 +72,8 @@ router.delete("/eid/:eid", function(req, res){
 });
 
 //delete by eid
-router.delete("/idname/:idname", function(req, res){
-  Relation.remove({idname:req.params.idname}, function(req, response){
+router.delete("/uid/:uid", function(req, res){
+  Relation.remove({uid:req.params.uid}, function(req, response){
     res.json({delete:"complete"});
   });
 });

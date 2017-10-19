@@ -8,6 +8,7 @@ var http = require('http');
 var qs = require('querystring');
 var request = require("request");
 var xml2js = require('xml2js');
+var cheerio = require('cheerio');
 
 //index
 router.get("/", function(req, res){
@@ -106,6 +107,45 @@ router.post("/", function(req, res){
     }
 
     //army(sadan) - find from div1 ~ div
+});
+
+
+router.post("/contents", function(req, res){
+  //get detailForm and submit
+  //div
+  if (true) {
+    var options = {
+        method: 'POST',
+        //FIXME - using req.body get recruit_idix
+        url: 'http://www.army.mil.kr/iletter/emsWrite.do?recruit_idx=262984',
+        headers:{
+          'cache-control': 'no-cache',
+          'content-type': 'application/x-www-form-urlencoded'
+        }
+    };
+
+    request(options, function(error, response, body) {
+        if(error) throw new Error(error);
+
+        console.log('request finish');
+        var $ = cheerio.load(body);
+        var doc = $('form[name=detailForm]');
+        //input writer, pw, title, contents into the html
+        $('#writer').val(req.body.Writer);
+        $('#pw').val(req.body.Password);
+        $('#title').val(req.body.Title);
+        $('#contents').val("언제나 좋은 하루 되셨으면 좋겠습니다.");
+
+
+       // doc.action = "http://www.army.mil.kr/iletter/emsWriteProc.do"
+
+
+       //FIXME - send data
+
+
+        res.send(doc.toString());
+      });
+  }
 });
 
 module.exports = router; 

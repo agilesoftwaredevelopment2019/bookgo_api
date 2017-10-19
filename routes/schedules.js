@@ -3,6 +3,7 @@
 const express = require('express');
 var router = express.Router();
 var Schedule = require('../models/Schedule');
+var Relation = require('../models/Relation');
 var https = require('https');
 var http = require('http');
 var qs = require('querystring');
@@ -25,6 +26,7 @@ router.get("/:eid", function(req, res){
   Schedule.findOne({eid:req.params.eid})
   .sort('-eid')
   .exec(function (err, schedule) {
+    console.log(schedule);
     res.json(schedule);
   }); 
 });
@@ -37,20 +39,31 @@ router.post("/", function(req, res){
   Schedule.findOne({})
   .sort('-eid')
   .exec(function (err, schedule) {
-    console.log(schedule);
     if(!schedule)
       lastNum = 0;
     else
       lastNum = schedule.eid;
 
+    var newEId = lastNum+1;
 
     //make eid
-    Schedule.create({eid:lastNum+1, date:req.body.date, title:req.body.title, sort:req.body.sort}, 
+    Schedule.create({eid:newEId, date:req.body.date, title:req.body.title, sort:req.body.sort, detail:req.body.detail}, 
       function(err, schedule){
         if(err)
           res.json(err);
         else
-          res.json(schedule);
+        {
+          //make relation between uid and eid
+          Relation.create({uid: req.body.uid, eid:newEId}, function(err, relation){
+            if(err)
+              res.json(err);
+            else
+            {
+              console.log("create", schedule);
+              res.json(schedule);
+            }
+          });
+        }
       });
     }); 
 });
@@ -83,6 +96,31 @@ router.put("/", function(req, res) {
 router.delete("/:eid", function(req, res){
   Schedule.remove({eid: req.params.eid}, function(req, response){
     res.json({delete : "success"});
+  });
+});
+
+
+//-------------------------------------------------------//
+//own CRUD
+//get schedules by uid
+router.get("/uid/:uid", function(req, res){
+  var retRes = [];
+  Relation.find({uid:req.params.uid}, function(err, relations){
+    if(err)
+      res.json(err);
+    else
+    {
+      console.log(relations);
+      /*Schedule.findOne({eid:relations[0].eid}, function(err, schedule){
+          res.json(schedule);
+       });*/
+      /*for(var i=0; i<relations.length; i++)
+      {
+        Schedule.findOne({eid:relations[i].eid}, function(err, schedule){
+          res.json(schedule);
+        });
+      }*/
+    };
   });
 });
 

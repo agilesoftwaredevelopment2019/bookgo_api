@@ -7,7 +7,8 @@ var ScheduleSchema = mongoose.Schema({
 	eid:{type:Number, required:true, unique:true},
 	date:{type:String},
 	title:{type:String, required:[true, "Title is required!"]},
-	sort:{type:String}
+	sort:{type:String},
+	detail:{type:String, required:[true], default:"*"}
 });
 
 //model&export

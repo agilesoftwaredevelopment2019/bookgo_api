@@ -20,8 +20,6 @@ router.get("", function(req, res){
 //Login
 router.post("/login", function(req, res){
     console.log("login into");
-
-    console.log(id, password);
     User.findOne({idname:req.body.id, password:req.body.password}, function(err, user){
       if(err)
       {
@@ -36,7 +34,7 @@ router.post("/login", function(req, res){
       {
         console.log("Login Success");
         console.log(user.nickname);
-        res.json(user.nickname);
+        res.json(user);
       }
     });
   });
@@ -62,9 +60,7 @@ router.post("/signup", function(req, res){
       res.json(err.message);
     }
     else
-    {
      res.json({create: 'success'});
-    }
     });
   });
 });

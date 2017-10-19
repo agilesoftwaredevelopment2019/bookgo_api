@@ -28,8 +28,10 @@ app.use(function (req, res, next) {
 
 //Routes
 app.use("/users", require("./routes/users"));
+app.use("/schedules", require("./routes/schedules"));
+app.use("/relations", require("./routes/relations"));
 
 //Server
 app.listen(8080, function(){
- console.log("server on!");
+ console.log("Ceremony Helper server on!");
 });

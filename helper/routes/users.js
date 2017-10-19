@@ -8,20 +8,19 @@ var http = require('http');
 var qs = require('querystring');
 
 //index
-router.get("/", function(req, res){
-	res.setHeader('Content-Type', 'application/json');
-	res.send(JSON.stringify({a:1}));
-	console.log("Get");
+router.get("", function(req, res){
+  User.find({})
+  .sort('-uid')
+  .exec(function (err, user) {
+    res.json(user);
+  }); 
 });
+
 
 //Login
 router.post("/login", function(req, res){
-    var id = req.body.ID;
-    var password = req.body.PASSWORD;
     console.log("login into");
-
-    console.log(id, password);
-    User.findOne({idname:id, password:password}, function(err, user){
+    User.findOne({idname:req.body.id, password:req.body.password}, function(err, user){
       if(err)
       {
         console.log("Login fail");
@@ -35,24 +34,36 @@ router.post("/login", function(req, res){
       {
         console.log("Login Success");
         console.log(user.nickname);
-        res.json(user.nickname);
+        res.json(user);
       }
     });
   });
 
 //Create
 router.post("/signup", function(req, res){
-    console.log("Singup into");
-  console.log(req.body);
-    User.create({idname:req.body.ID, password:req.body.PASSWORD, nickname:req.body.NICKNAME}, function(err, ScheduleUser){
-      if(err) {
-        res.json({create: 'fail'});
-      }
-      else
-      {
-        res.json({create: 'success'});
-      }
+  console.log("Singup into");
+
+  //get last eid of schedules
+  var lastNum;
+  User.findOne({})
+  .sort('-uid')
+  .exec(function (err, user) {
+    if(!user){
+      lastNum = 0;
+    }
+    else
+      lastNum = user.uid;
+
+    //if not error
+    User.create({uid:lastNum+1, idname:req.body.id, password:req.body.password, nickname:req.body.nickname}, function(err, ScheduleUser){
+    if(err) {
+      res.json(err.message);
+    }
+    else
+     res.json({create: 'success'});
     });
   });
+});
+
 
 module.exports = router; 

@@ -71,7 +71,7 @@ router.post("/", function(req, res){
 
 //edit
 router.put("/", function(req, res) {
-  Schedule.findyById(req.body.eid, function(err, schedule) {
+  Schedule.findOne({eid: req.body.eid}, function(err, schedule) {
     if(err)
     {
       res.json(err);
@@ -81,6 +81,7 @@ router.put("/", function(req, res) {
       schedule.title = req.body.title || schedule.title;
       schedule.date = req.body.date || schedule.date;
       schedule.sort = req.body.sort || schedule.sort;
+      schedule.detail = req.body.detail || schedule.detail;
 
       schedule.save(function(err, sch) {
         if(err)
@@ -95,34 +96,12 @@ router.put("/", function(req, res) {
 //delete
 router.delete("/:eid", function(req, res){
   Schedule.remove({eid: req.params.eid}, function(req, response){
-    res.json({delete : "success"});
+    res.json({delete : "success"}); 
   });
 });
 
 
 //-------------------------------------------------------//
-//own CRUD
-//get schedules by uid
-router.get("/uid/:uid", function(req, res){
-  var retRes = [];
-  Relation.find({uid:req.params.uid}, function(err, relations){
-    if(err)
-      res.json(err);
-    else
-    {
-      console.log(relations);
-      /*Schedule.findOne({eid:relations[0].eid}, function(err, schedule){
-          res.json(schedule);
-       });*/
-      /*for(var i=0; i<relations.length; i++)
-      {
-        Schedule.findOne({eid:relations[i].eid}, function(err, schedule){
-          res.json(schedule);
-        });
-      }*/
-    };
-  });
-});
 
 
 //module & export

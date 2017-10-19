@@ -16,6 +16,42 @@ router.get("", function(req, res){
   }); 
 });
 
+//show
+router.get("/:uid", function(req, res){
+  User.findOne({uid:req.params.uid}, function(err, user){
+    if(err)
+    {
+
+    }
+    else if(!user)
+    {
+
+    }
+    else
+    {
+      res.json(user);
+    }
+  });
+});
+
+//show
+router.get("/idname/:idname", function(req, res){
+  User.findOne({idname:req.params.idname}, function(err, user){
+    if(err)
+    {
+
+    }
+    else if(!user)
+    {
+
+    }
+    else
+    {
+      res.json(user);
+    }
+  });
+});
+
 
 //Login
 router.post("/login", function(req, res){

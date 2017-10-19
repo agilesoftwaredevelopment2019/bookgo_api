@@ -44,6 +44,7 @@ router.get("/eid/:eid", function(req, res){
         res.json();
       }
       else{
+        console.log(db_dt);
         res.json(db_dt);
       }
     }
@@ -52,7 +53,7 @@ router.get("/eid/:eid", function(req, res){
 
 //create
 router.post("/", function(req, res){
-  Relation.create({idname:req.body.idname, eid:req.body.eid}, function(err, relation){
+  Relation.create({uid:req.body.uid, eid:req.body.eid}, function(err, relation){
     if(err)
       res.json(err);
     else
@@ -64,14 +65,20 @@ router.post("/", function(req, res){
 });
 
 
-//delete by eid
+//delete by eid and uid
+router.delete("/", function(req, res){
+  Relation.remove({eid:req.body.eid, uid:req.body.uid}, function(err, response){
+    res.json({delete:"complete"});
+  });
+});
+
 router.delete("/eid/:eid", function(req, res){
   Relation.remove({eid:req.params.eid}, function(req, response){
     res.json({delete:"complete"});
   });
 });
 
-//delete by eid
+//delete by uid
 router.delete("/uid/:uid", function(req, res){
   Relation.remove({uid:req.params.uid}, function(req, response){
     res.json({delete:"complete"});

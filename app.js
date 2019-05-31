@@ -29,8 +29,7 @@ app.use(function (req, res, next) {
 
 //Routes
 app.use("/users", require("./routes/users"));
-app.use("/schedules", require("./routes/schedules"));
-app.use("/relations", require("./routes/relations"));
+app.use("/books", require("./routes/books"));
 
 //Server
 app.listen(8080, function(){

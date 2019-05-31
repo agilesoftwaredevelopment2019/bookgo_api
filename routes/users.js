@@ -17,24 +17,6 @@ router.get("", function(req, res){
 });
 
 //show
-router.get("/:uid", function(req, res){
-  User.findOne({uid:req.params.uid}, function(err, user){
-    if(err)
-    {
-
-    }
-    else if(!user)
-    {
-
-    }
-    else
-    {
-      res.json(user);
-    }
-  });
-});
-
-//show
 router.get("/idname/:idname", function(req, res){
   User.findOne({idname:req.params.idname}, function(err, user){
     if(err)
@@ -54,7 +36,7 @@ router.get("/idname/:idname", function(req, res){
 
 
 //Login
-router.post("/login", function(req, res){
+router.get("/login", function(req, res){
     console.log("login into");
     User.findOne({idname:req.body.id, password:req.body.password}, function(err, user){
       if(err)
@@ -91,15 +73,48 @@ router.post("/signup", function(req, res){
       lastNum = user.uid;
 
     //if not error
-    User.create({uid:lastNum+1, idname:req.body.id, password:req.body.password, nickname:req.body.nickname}, function(err, ScheduleUser){
+    User.create({uid:lastNum+1, idname:req.body.id, password:req.body.password, nickname:req.body.nickname,
+                name:req.body.name, phonenumber:req.body.phonenumber, isAuthenticated:false}, function(err, User){
     if(err) {
       res.json(err.message);
     }
     else
-     res.json({create: 'success'});
+      res.json({create: 'success'});
     });
   });
 });
+
+router.put("/authenticate", function(req, res){
+  updatedAuthentication = req.body.authentication;
+  User.findOne({idname:req.body.id}, function(err, user){
+    user.isAuthenticated = updatedAuthentication
+  });
+});
+
+//Authenticat
+router.put("/authenticate", function(req, res){
+  console.log("Authenticate");
+
+  User.findOne({idname:req.body.id}, function(err, user){
+    if(err)
+    {
+      console.log("Authenticate denied.");
+      res.json(err);
+    }
+    if(!user)
+    {
+      res.status(404).json("Not Found");
+    }
+    else
+    {
+      user.put()
+      console.log("Authentication Success");
+      console.log(user.nickname);
+      User
+      res.json(user);
+    }
+  });
+})
 
 
 module.exports = router; 

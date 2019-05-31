@@ -17,22 +17,29 @@ router.get("", function(req, res){
   }); 
 });
 
-//show
-router.get("/:idname", function(req, res){
-  User.findOne({idname:req.params.idname}, function(err, user){
-    if(err)
-    {
+//show 
+router.get("/:book_name", function(req, res){
+  Book.findOne({title:book_name}, function(err, book){
+    if(err){
 
     }
-    else if(!user)
-    {
-
+    else if(!book){
+      console.log("Cannot find book");
     }
-    else
-    {
-      res.json(user);
+    else{
+      finding_book_id = book.uid;
+      Product.findOne({book_id:finding_book_id}, function(err, user){
+      if(err){
+      }
+      else if(!user){
+      }
+      else{
+        res.json(user);
+      }
+      });
     }
   });
+
 });
 
 //Create
@@ -62,37 +69,19 @@ router.post("", function(req, res){
   });
 });
 
-router.put("", function(req, res){
+//Soldout
+router.put("/soldOut", function(req, res){
   soldout = req.body.soldout;
   Product.updateOne({uid:req.body.id}, {soldout: soldout}, function(err, product){
     res.json({success: true});
   });
 });
 
-// //Authenticat
-// router.put("/authenticate", function(req, res){
-//   console.log("Authenticate");
-
-//   User.findOne({idname:req.body.id}, function(err, user){
-//     if(err)
-//     {
-//       console.log("Authenticate denied.");
-//       res.json(err);
-//     }
-//     if(!user)
-//     {
-//       res.status(404).json("Not Found");
-//     }
-//     else
-//     {
-//       user.put()
-//       console.log("Authentication Success");
-//       console.log(user.nickname);
-//       User
-//       res.json(user);
-//     }
-//   });
-// })
-
+//Change Price
+router.put("/changePrice", function(req, res){
+  Product.updateOne({uid:req.body.id}, {price: req.body.price}, function(err, product){
+    res.json({success: true});
+  });
+});
 
 module.exports = router; 

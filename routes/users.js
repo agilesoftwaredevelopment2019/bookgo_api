@@ -3,6 +3,7 @@
 const express = require('express');
 var router = express.Router();
 var User = require('../models/User');
+var Product = require('../models/Product');
 var https = require('https');
 var http = require('http');
 var qs = require('querystring');
@@ -36,7 +37,7 @@ router.get("/idname/:idname", function(req, res){
 
 
 //Login
-router.get("/login", function(req, res){
+router.post("/login", function(req, res){
     console.log("login into");
     User.findOne({idname:req.body.id, password:req.body.password}, function(err, user){
       if(err)
@@ -58,8 +59,8 @@ router.get("/login", function(req, res){
   });
 
 //Create
-router.post("/signup", function(req, res){
-  console.log("Singup into");
+router.post("", function(req, res){
+  console.log("Singup");
 
   //get last eid of schedules
   var lastNum;
@@ -91,30 +92,14 @@ router.put("/authenticate", function(req, res){
   });
 });
 
-// //Authenticat
-// router.put("/authenticate", function(req, res){
-//   console.log("Authenticate");
-
-//   User.findOne({idname:req.body.id}, function(err, user){
-//     if(err)
-//     {
-//       console.log("Authenticate denied.");
-//       res.json(err);
-//     }
-//     if(!user)
-//     {
-//       res.status(404).json("Not Found");
-//     }
-//     else
-//     {
-//       user.put()
-//       console.log("Authentication Success");
-//       console.log(user.nickname);
-//       User
-//       res.json(user);
-//     }
-//   });
-// })
+router.delete("/:id", function(req, res){
+  //remove products by user
+  Product.deleteMany({seller_id:req.params.id}, function(err, user){
+    User.deleteOne({uid:req.params.id}, function(err, user){
+      res.json({delete: 'success'});
+    });
+  });
+});
 
 
 module.exports = router; 

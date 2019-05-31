@@ -34,6 +34,6 @@ app.use("/products", require("./routes/products"));
 app.use("/transactions", require("./routes/transactions"));
 
 //Server
-app.listen(process.env.PORT, function(){
+app.listen(process.env.PORT || 3000, function(){
  console.log("BookGo server on!");
 });

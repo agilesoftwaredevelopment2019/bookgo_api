@@ -34,6 +34,6 @@ app.use("/products", require("./routes/products"));
 app.use("/transactions", require("./routes/transactions"));
 
 //Server
-app.listen(8080, function(){
+app.listen(process.env.PORT || 8080, function(){
  console.log("Ceremony Helper server on!");
 });

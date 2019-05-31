@@ -2,7 +2,7 @@
 
 const express = require('express');
 var router = express.Router();
-var User = require('../models/User');
+var User = require('../models/Transaction');
 var https = require('https');
 var http = require('http');
 var qs = require('querystring');
@@ -17,8 +17,8 @@ router.get("", function(req, res){
 });
 
 //show
-router.get("/idname/:idname", function(req, res){
-  User.findOne({idname:req.params.idname}, function(err, user){
+router.get("/buyer_id/:buyer_id", function(req, res){
+  User.findOne({idname:req.params.id}, function(err, user){
     if(err)
     {
 
@@ -34,32 +34,26 @@ router.get("/idname/:idname", function(req, res){
   });
 });
 
+router.get("/seller_id/:seller_id", function(req, res){
+  User.findOne({idname:req.params.id}, function(err, user){
+    if(err)
+    {
 
-//Login
-router.get("/login", function(req, res){
-    console.log("login into");
-    User.findOne({idname:req.body.id, password:req.body.password}, function(err, user){
-      if(err)
-      {
-        console.log("Login fail");
-        res.json(err);
-      }
-      if(!user)
-      {
-        res.status(404).json("Not Found");
-      }
-      else
-      {
-        console.log("Login Success");
-        console.log(user.nickname);
-        res.json(user);
-      }
-    });
+    }
+    else if(!user)
+    {
+
+    }
+    else
+    {
+      res.json(user);
+    }
   });
+});
 
 //Create
-router.post("/signup", function(req, res){
-  console.log("Singup into");
+router.post("/makeTransaction", function(req, res){
+  console.log("Make Transaction");
 
   //get last eid of schedules
   var lastNum;

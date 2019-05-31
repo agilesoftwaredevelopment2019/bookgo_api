@@ -30,6 +30,7 @@ app.use(function (req, res, next) {
 //Routes
 app.use("/users", require("./routes/users"));
 app.use("/books", require("./routes/books"));
+app.use("/products", require("./routes/products"));
 
 //Server
 app.listen(8080, function(){

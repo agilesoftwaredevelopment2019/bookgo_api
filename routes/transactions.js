@@ -2,23 +2,24 @@
 
 const express = require('express');
 var router = express.Router();
-var User = require('../models/Transaction');
+var Transaction = require('../models/Transaction');
+var Product = require('../models/Product');
 var https = require('https');
 var http = require('http');
 var qs = require('querystring');
 
 //index
 router.get("", function(req, res){
-  User.find({})
+  Transaction.find({})
   .sort('-uid')
-  .exec(function (err, user) {
-    res.json(user);
+  .exec(function (err, transaction) {
+    res.json(transaction);
   }); 
 });
 
 //show
 router.get("/buyer_id/:buyer_id", function(req, res){
-  User.findOne({idname:req.params.id}, function(err, user){
+  Transaction.findOne({idname:req.params.id}, function(err, user){
     if(err)
     {
 
@@ -52,12 +53,12 @@ router.get("/seller_id/:seller_id", function(req, res){
 });
 
 //Create
-router.post("/makeTransaction", function(req, res){
+router.post("", function(req, res){
   console.log("Make Transaction");
 
   //get last eid of schedules
   var lastNum;
-  User.findOne({})
+  Transaction.findOne({})
   .sort('-uid')
   .exec(function (err, user) {
     if(!user){
@@ -67,13 +68,15 @@ router.post("/makeTransaction", function(req, res){
       lastNum = user.uid;
 
     //if not error
-    User.create({uid:lastNum+1, idname:req.body.id, password:req.body.password, nickname:req.body.nickname,
-                name:req.body.name, phonenumber:req.body.phonenumber, isAuthenticated:false}, function(err, User){
-    if(err) {
-      res.json(err.message);
-    }
-    else
-      res.json({create: 'success'});
+    Transaction.create({uid:lastNum+1, book_id : req.body.book_id,
+                buyer_id:req.body.buyer_id, seller_id:req.body.seller_id, price:req.body.price}, function(err, User){
+      Product.updateOne({uid:req.body.product_uid}, {soldout:true}, function(err, user){
+      });
+      if(err) {
+        res.json(err.message);
+      }
+      else
+        res.json({create: 'success'});
     });
   });
 });

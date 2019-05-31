@@ -11,6 +11,9 @@
     "express": "^4.15.2",
     "method-override": "^2.3.10",
     "mongoose": "^4.12.1",
-    "ejs": "^2.5.7"
+    "ejs": "^2.5.7",
+    "xml2js":"0.4.19",
+    "request":"2.88.0",
+    "cheerio":"1.0.0-rc.3"
   }
 }

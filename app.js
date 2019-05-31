@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 
 //DB Settings
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://oscha:qlqjs123@ds127894.mlab.com:27894/online-db-oscha", { useMongoClient: true });
+mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
 var db = mongoose.connection;
 db.once("open", function(){
 	console.log("DB Connected");

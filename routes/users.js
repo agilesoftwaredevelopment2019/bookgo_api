@@ -86,9 +86,9 @@ router.post("", function(req, res){
 });
 
 router.put("/authenticate", function(req, res){
-  updatedAuthentication = req.body.authentication;
-  User.updateOne({idname:req.body.id}, {isAuthenticated:updatedAuthentication}, function(err, user){
-    res.json({id:req.body.id, authenticated:req.body.authentication});
+  updatedAuthentication = req.body.isAuthenticated;
+  User.updateOne({idname:req.body.idname}, {isAuthenticated:updatedAuthentication}, function(err, user){
+    res.json({create: 'success'});
   });
 });
 

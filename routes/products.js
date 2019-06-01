@@ -28,7 +28,7 @@ router.get("/:book_name", function(req, res){
     }
     else{
       finding_book_id = book.uid;
-      Product.findOne({book_id:finding_book_id}, function(err, user){
+      Product.find({book_id:finding_book_id}, function(err, user){
       if(err){
       }
       else if(!user){
@@ -72,14 +72,20 @@ router.post("", function(req, res){
 //Soldout
 router.put("/soldOut", function(req, res){
   soldout = req.body.soldout;
-  Product.updateOne({uid:req.body.id}, {soldout: soldout}, function(err, product){
+  Product.updateOne({uid:req.body.uid}, {soldout: soldout}, function(err, product){
     res.json({success: true});
   });
 });
 
 //Change Price
 router.put("/changePrice", function(req, res){
-  Product.updateOne({uid:req.body.id}, {price: req.body.price}, function(err, product){
+  Product.updateOne({uid:req.body.uid}, {price: req.body.price}, function(err, product){
+    res.json({success: true});
+  });
+});
+
+router.delete("/:id", function(req, res){
+  Product.delete({uid:req.params.uid}, function(err, product){
     res.json({success: true});
   });
 });

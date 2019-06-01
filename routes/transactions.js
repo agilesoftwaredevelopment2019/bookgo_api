@@ -19,7 +19,7 @@ router.get("", function(req, res){
 
 //show
 router.get("/buyer_id/:buyer_id", function(req, res){
-  Transaction.findOne({idname:req.params.id}, function(err, user){
+  Transaction.find({idname:req.params.id}, function(err, transaction){
     if(err)
     {
 
@@ -30,13 +30,13 @@ router.get("/buyer_id/:buyer_id", function(req, res){
     }
     else
     {
-      res.json(user);
+      res.json(transaction);
     }
   });
 });
 
 router.get("/seller_id/:seller_id", function(req, res){
-  User.findOne({idname:req.params.id}, function(err, user){
+  Transaction.find({idname:req.params.id}, function(err, transaction){
     if(err)
     {
 
@@ -47,7 +47,7 @@ router.get("/seller_id/:seller_id", function(req, res){
     }
     else
     {
-      res.json(user);
+      res.json(transaction);
     }
   });
 });
@@ -60,12 +60,12 @@ router.post("", function(req, res){
   var lastNum;
   Transaction.findOne({})
   .sort('-uid')
-  .exec(function (err, user) {
-    if(!user){
+  .exec(function (err, transaction) {
+    if(!transaction){
       lastNum = 0;
     }
     else
-      lastNum = user.uid;
+      lastNum = transaction.uid;
 
     //if not error
     Transaction.create({uid:lastNum+1, book_id : req.body.book_id,
@@ -81,37 +81,6 @@ router.post("", function(req, res){
   });
 });
 
-router.put("/authenticate", function(req, res){
-  updatedAuthentication = req.body.authentication;
-  User.updateOne({idname:req.body.id}, {isAuthenticated:updatedAuthentication}, function(err, user){
-    res.json({id:req.body.id, authenticated:req.body.authentication});
-  });
-});
-
-// //Authenticat
-// router.put("/authenticate", function(req, res){
-//   console.log("Authenticate");
-
-//   User.findOne({idname:req.body.id}, function(err, user){
-//     if(err)
-//     {
-//       console.log("Authenticate denied.");
-//       res.json(err);
-//     }
-//     if(!user)
-//     {
-//       res.status(404).json("Not Found");
-//     }
-//     else
-//     {
-//       user.put()
-//       console.log("Authentication Success");
-//       console.log(user.nickname);
-//       User
-//       res.json(user);
-//     }
-//   });
-// })
 
 
 module.exports = router; 

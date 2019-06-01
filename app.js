@@ -32,6 +32,7 @@ app.use("/users", require("./routes/users"));
 app.use("/books", require("./routes/books"));
 app.use("/products", require("./routes/products"));
 app.use("/transactions", require("./routes/transactions"));
+app.use("/interests", require("./routes/interests"));
 
 //Server
 app.listen(process.env.PORT || 3000, function(){

@@ -28,7 +28,7 @@ router.get("/:book_name", function(req, res){
     }
     else{
       finding_book_id = book.uid;
-      Product.find({book_id:finding_book_id}, function(err, user){
+      Product.find({book_id:finding_book_id, soldout:false}, function(err, user){
       if(err){
       }
       else if(!user){

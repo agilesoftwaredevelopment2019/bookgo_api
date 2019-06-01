@@ -9,9 +9,9 @@
 
 # api endpoint
 ## User
-GET users
+GET users <br/>
 req: {
-}
+}<br/>
 res: {
   list of 
   {
@@ -23,11 +23,11 @@ res: {
     "phonenumber",
     "isAuthenticate"
   }
-}
+}<br/>
 
-GET users/idname/:idname
+GET users/idname/:idname <br/>
 req: {
-}
+}<br/>
 res: {
   {
     "uid",
@@ -38,9 +38,9 @@ res: {
     "phonenumber",
     "isAuthenticate"
   }
-}
+}<br/>
 
-POST users
+POST users <br/>
 req: {
   "idname",
   "password",
@@ -48,42 +48,42 @@ req: {
   "name",
   "phonenumber",
   "isAuthenticate"
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
-POST users/login
+POST users/login<br/>
 req: {
   "idname",
   "password"
-}
+}<br/>
 res: {
   "nickname"
-}
+}<br/>
 
-POST users/authenticate
+POST users/authenticate<br/>
 req: {
   "idname",
   "isAuthenticate"
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
-DELETE users/:id
+DELETE users/:id<br/>
 req: {
   "uid"
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
 
 ## Book
-GET books
+GET books<br/>
 req: {
-}
+}<br/>
 res: {
   list of 
   {
@@ -91,37 +91,37 @@ res: {
     "title",
     "category"
   }
-}
+}<br/>
 
-GET books/:uid
+GET books/:uid<br/>
 req: {
-}
+}<br/>
 res: {
   "uid",
   "title",
   "category"
-}
+}<br/>
 
-POST books
+POST books<br/>
 req: {
   "title"
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
-DELETE books/:uid
+DELETE books/:uid<br/>
 req: {
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
 
 ## Product
-GET products
+GET products<br/>
 req: {
-}
+}<br/>
 res: {
   list of 
   {
@@ -131,11 +131,11 @@ res: {
     "price",
     "soldout"
   }
-}
+}<br/>
 
-GET products/:book_name
+GET products/:book_name<br/>
 req: {
-}
+}<br/>
 res: {
   list of 
   {
@@ -145,48 +145,48 @@ res: {
     "price",
     "soldout"
   }
-}
+}<br/>
 
-POST products
+POST products<br/>
 req: {
   "book_id",
   "seller_id",
   "price"
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
-POST products/soldOut
+POST products/soldOut<br/>
 req: {
   "uid",
   "soldout"
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
-POST products/changePrice
+POST products/changePrice<br/>
 req: {
   "uid",
   "price"
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
-DELETE products/:uid
+DELETE products/:uid<br/>
 req: {
-}
+}<br/>
 res: {
   "success"
-}
+}<br/>
 
 
 ## Transaction
-GET transactions
+GET transactions<br/>
 req:{
-}
+}<br/>
 res: {
   list of 
   {
@@ -196,11 +196,11 @@ res: {
     "seller_id",
     "price"
   }
-}
+}<br/>
 
-GET transaction/buyer_id/:buyer_id
+GET transaction/buyer_id/:buyer_id<br/>
 req:{
-}
+}<br/>
 res:{
   list of 
   {
@@ -210,11 +210,11 @@ res:{
     "seller_id",
     "price"
   }
-}
+}<br/>
 
-GET transaction/seller_id/:seller_id
+GET transaction/seller_id/:seller_id<br/>
 req:{
-}
+}<br/>
 res:{
   list of 
   {
@@ -224,12 +224,12 @@ res:{
     "seller_id",
     "price"
   }
-}
+}<br/>
 
 ## Interest
-GET interests
+GET interests<br/>
 req:{
-}
+}<br/>
 res: {
   list of 
   {
@@ -237,11 +237,11 @@ res: {
     "user_id",
     "book_id"
   }
-}
+}<br/>
 
-GET interests/:user_id
+GET interests/:user_id<br/>
 req:{
-}
+}<br/>
 res: {
   list of 
   {
@@ -249,20 +249,20 @@ res: {
     "user_id",
     "book_id"
   }
-}
+}<br/>
 
-POST interests
+POST interests<br/>
 req:{
   "user_id",
   "book_id"
-}
+}<br/>
 res:{
   "success"
-}
+}<br/>
 
-DELETE interests/:user_id/:book_id
+DELETE interests/:user_id/:book_id<br/>
 req:{
-}
+}<br/>
 res:{
   "success"
-}
+}<br/>

@@ -8,7 +8,7 @@
 1. API Server for BookGo run in Heroku
 
 # api endpoint
-1. User
+## User
 GET users
 req: {
 }
@@ -50,7 +50,7 @@ req: {
   "isAuthenticate"
 }
 res: {
-  "success",
+  "success"
 }
 
 POST users/login
@@ -59,7 +59,7 @@ req: {
   "password"
 }
 res: {
-  "nickname",
+  "nickname"
 }
 
 POST users/authenticate
@@ -68,7 +68,7 @@ req: {
   "isAuthenticate"
 }
 res: {
-  "success",
+  "success"
 }
 
 DELETE users/:id
@@ -76,11 +76,11 @@ req: {
   "uid"
 }
 res: {
-  "success",
+  "success"
 }
 
 
-2. Book
+## Book
 GET books
 req: {
 }
@@ -118,7 +118,7 @@ res: {
 }
 
 
-3. Product
+## Product
 GET products
 req: {
 }
@@ -183,7 +183,7 @@ res: {
 }
 
 
-4. Transaction
+## Transaction
 GET transactions
 req:{
 }
@@ -194,7 +194,7 @@ res: {
     "book_id",
     "buyer_id",
     "seller_id",
-    "price",
+    "price"
   }
 }
 
@@ -208,7 +208,7 @@ res:{
     "book_id",
     "buyer_id",
     "seller_id",
-    "price",
+    "price"
   }
 }
 
@@ -222,12 +222,11 @@ res:{
     "book_id",
     "buyer_id",
     "seller_id",
-    "price",
+    "price"
   }
 }
 
-
-5. Interest
+## Interest
 GET interests
 req:{
 }

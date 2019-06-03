@@ -10,5 +10,5 @@ var InterestSchema = mongoose.Schema({
 });
 
 //model&export
-var User = mongoose.model("User", InterestSchema);
-module.exports = User;
+var Interest = mongoose.model("Interest", InterestSchema);
+module.exports = Interest;

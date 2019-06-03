@@ -95,7 +95,7 @@ router.put("/authenticate", function(req, res){
 router.delete("/:uid", function(req, res){
   //remove products by user
   Product.deleteMany({seller_id:req.params.uid}, function(err, user){
-    User.deleteOne({uid:req.params.id}, function(err, user){
+    User.deleteOne({uid:req.params.uid}, function(err, user){
       res.json({delete: 'success'});
     });
   });

@@ -19,7 +19,7 @@ router.get("", function(req, res){
 
 //show
 router.get("/buyer_id/:buyer_id", function(req, res){
-  Transaction.find({idname:req.params.id}, function(err, transaction){
+  Transaction.find({idname:req.params.buyer_id}, function(err, transaction){
     if(err)
     {
 
@@ -36,7 +36,7 @@ router.get("/buyer_id/:buyer_id", function(req, res){
 });
 
 router.get("/seller_id/:seller_id", function(req, res){
-  Transaction.find({idname:req.params.id}, function(err, transaction){
+  Transaction.find({idname:req.params.seller_id}, function(err, transaction){
     if(err)
     {
 

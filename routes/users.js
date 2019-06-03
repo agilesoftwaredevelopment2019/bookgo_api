@@ -39,7 +39,7 @@ router.get("/idname/:idname", function(req, res){
 //Login
 router.post("/login", function(req, res){
     console.log("login into");
-    User.findOne({idname:req.body.id, password:req.body.password}, function(err, user){
+    User.findOne({idname:req.body.idname, password:req.body.password}, function(err, user){
       if(err)
       {
         console.log("Login fail");
@@ -74,7 +74,7 @@ router.post("", function(req, res){
       lastNum = user.uid;
 
     //if not error
-    User.create({uid:lastNum+1, idname:req.body.id, password:req.body.password, nickname:req.body.nickname,
+    User.create({uid:lastNum+1, idname:req.body.idname, password:req.body.password, nickname:req.body.nickname,
                 name:req.body.name, phonenumber:req.body.phonenumber, isAuthenticated:false}, function(err, User){
     if(err) {
       res.json(err.message);
@@ -92,9 +92,9 @@ router.put("/authenticate", function(req, res){
   });
 });
 
-router.delete("/:id", function(req, res){
+router.delete("/:uid", function(req, res){
   //remove products by user
-  Product.deleteMany({seller_id:req.params.id}, function(err, user){
+  Product.deleteMany({seller_id:req.params.uid}, function(err, user){
     User.deleteOne({uid:req.params.id}, function(err, user){
       res.json({delete: 'success'});
     });

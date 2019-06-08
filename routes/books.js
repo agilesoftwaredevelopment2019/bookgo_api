@@ -15,7 +15,7 @@ router.get("", function(req, res){
 
 //show
 router.get("/:uid", function(req, res){
-  Book.findOne({eid:req.params.uid})
+  Book.findOne({uid:req.params.uid})
   .sort('-uid')
   .exec(function (err, book) {
     res.json(book);

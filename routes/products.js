@@ -8,12 +8,14 @@ var https = require('https');
 var http = require('http');
 var qs = require('querystring');
 
+
+
 //index
 router.get("", function(req, res){
   Product.find({})
   .sort('-uid')
-  .exec(function (err, user) {
-    res.json(user);
+  .exec(function (err, product) {
+    res.json(product);
   }); 
 });
 
@@ -21,7 +23,6 @@ router.get("", function(req, res){
 router.get("/:book_name", function(req, res){
   Book.findOne({title:book_name}, function(err, book){
     if(err){
-
     }
     else if(!book){
       console.log("Cannot find book");
@@ -39,10 +40,9 @@ router.get("/:book_name", function(req, res){
       });
     }
   });
-
 });
 
-//Create
+//Create without Image
 router.post("", function(req, res){
   console.log("Register");
 
@@ -59,13 +59,21 @@ router.post("", function(req, res){
     
     //if not error
     Product.create({uid:lastNum+1, book_id:req.body.book_id, seller_id : req.body.seller_id,
-                price:req.body.price, soldout:false}, function(err, product){
+                price:req.body.price, filepath:req.body.filepath, soldout:false}, function(err, product){
     if(err) {
       res.json(err.message);
     }
     else
-      res.json({success: true});
+      res.json({success: true, uid:product.uid});
     });
+  });
+});
+
+//Give image to Product
+router.post("/image", function(req, res){
+  Product.findOne({uid: req.body.uid}, function(err, product){
+    product.image = req.body
+    product.save();
   });
 });
 
@@ -84,7 +92,7 @@ router.put("/changePrice", function(req, res){
   });
 });
 
-router.delete("/:id", function(req, res){
+router.delete("/:uid", function(req, res){
   Product.delete({uid:req.params.uid}, function(err, product){
     res.json({success: true});
   });

@@ -8,7 +8,8 @@ var ProductSchema = mongoose.Schema({
 	book_id:{type:Number, required:[true]},
 	seller_id:{type:Number, required:[true]},
 	price:{type:Number, required:[true]},
-	soldout:{type:Boolean, required:[true]}
+	soldout:{type:Boolean, required:[true]},
+	filepath:{type:String, required:[false]}
 });
 
 //model&export

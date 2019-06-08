@@ -93,7 +93,7 @@ router.put("/changePrice", function(req, res){
 });
 
 router.delete("/:uid", function(req, res){
-  Product.delete({uid:req.params.uid}, function(err, product){
+  Product.remove({uid:req.params.uid}, function(err, product){
     res.json({success: true});
   });
 });

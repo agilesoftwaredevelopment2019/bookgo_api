@@ -62,7 +62,7 @@ router.post("", function(req, res){
 
 router.delete("/:user_id/:book_id", function(req, res){
   //remove products by user
-  Interest.deleteOne({user_id:req.params.user_id, book_id:req.params.book_id}, function(err, interest){
+  Interest.remove({user_id:req.params.user_id, book_id:req.params.book_id}, function(err, interest){
     res.json({delete: 'success'});
   });
 });

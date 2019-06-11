@@ -9,7 +9,9 @@ var ProductSchema = mongoose.Schema({
 	seller_id:{type:Number, required:[true]},
 	price:{type:Number, required:[true]},
 	soldout:{type:Boolean, required:[true]},
-	filepath:{type:String, required:[false]}
+	phonenumber:{type:String, required:[true]},
+	title:{type:String, required:[true]},
+	description:{type:String, required:[false]}
 });
 
 //model&export

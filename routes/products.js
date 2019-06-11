@@ -59,7 +59,7 @@ router.post("", function(req, res){
     
     //if not error
     Product.create({uid:lastNum+1, book_id:req.body.book_id, seller_id : req.body.seller_id,
-                price:req.body.price, filepath:req.body.filepath, soldout:false}, function(err, product){
+                price:req.body.price, filepath:req.body.filepath, phonenumber:req.body.phonenumber, soldout:false}, function(err, product){
     if(err) {
       res.json(err.message);
     }

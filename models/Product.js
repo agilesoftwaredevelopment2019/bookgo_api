@@ -8,8 +8,9 @@ var ProductSchema = mongoose.Schema({
 	book_id:{type:Number, required:[true]},
 	seller_id:{type:Number, required:[true]},
 	price:{type:Number, required:[true]},
-	onSale:{type:Boolean, required:[true]},
-	description:{type:String, required:[false]}
+	onSale:{type:Boolean, required:[false]},
+	description:{type:String, required:[false]},
+	image_path:{type:String, required:[true]}
 });
 
 //model&export

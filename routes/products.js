@@ -4,98 +4,160 @@ const express = require('express');
 var router = express.Router();
 var Product = require('../models/Product');
 var Book = require('../models/Book');
-var https = require('https');
-var http = require('http');
-var qs = require('querystring');
-
 
 
 //index
 router.get("", function(req, res){
-  Product.find({})
-  .sort('-uid')
-  .exec(function (err, product) {
-    res.json(product);
-  }); 
+  try{
+    Product.find({})
+    .sort('-uid')
+    .exec(function (err, product) {
+      res.json(product);
+    }); 
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
+});
+
+router.get("/lists", async function(req, res){
+  Product.find({soldout:false})
+  .exec(async function (err, product) {
+    products = product.data;
+    for (item in products) {
+      bookId = item.book_id;
+      
+    }
+  });
 });
 
 //show 
 router.get("/:book_name", function(req, res){
-  Book.findOne({title:book_name}, function(err, book){
-    if(err){
-    }
-    else if(!book){
-      console.log("Cannot find book");
-    }
-    else{
-      finding_book_id = book.uid;
-      Product.find({book_id:finding_book_id, soldout:false}, function(err, user){
+  try {
+    Book.findOne({title:book_name}, function(err, book){
       if(err){
+        res.json({result: 'ERROR'});
       }
-      else if(!user){
+      else if(!book){
+        res.json({result: 'NOT_FOUND'});
       }
       else{
-        res.json(user);
+        finding_book_id = book.uid;
+        Product.find({book_id:finding_book_id, soldout:false}, function(err, user){
+        if(err){
+          res.json({result: 'ERROR'});
+        }
+        else if(!user){
+          res.json({result: 'NOT_FOUND'});
+        }
+        else{
+          res.json(user);
+        }
+        });
       }
-      });
-    }
-  });
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 //Create without Image
 router.post("", function(req, res){
-  console.log("Register");
-
-  //get last eid of schedules
-  var lastNum;
-  Product.findOne({})
-  .sort('-uid')
-  .exec(function (err, product) {
-    if(!product){
-      lastNum = 0;
-    }
-    else
-      lastNum = product.uid;
-    
-    //if not error
-    Product.create({uid:lastNum+1, book_id:req.body.book_id, seller_id : req.body.seller_id,
-                price:req.body.price, filepath:req.body.filepath, phonenumber:req.body.phonenumber, soldout:false}, function(err, product){
-    if(err) {
-      res.json(err.message);
-    }
-    else
-      res.json({success: true, uid:product.uid});
+  try{
+    var lastNum;
+    Product.findOne({})
+    .sort('-uid')
+    .exec(function (err, product) {
+      if(!product){
+        lastNum = 0;
+      }
+      else
+        lastNum = product.uid;
+      
+      // find if same book exist by name
+      Book.findOne({title: req.body.title}, function(err, book){
+        if(err){
+          res.json({result: 'ERROR'});
+        }
+        else if(!book){
+          Book.findOne({})
+          .sort('-uid')
+          .exec(function (err, book2) {
+            if(!book) {
+              lastNumForBook = 0;
+            }
+            else
+            lastNumForBook = book2.uid;
+            Product.create({uid:lastNum+1, 
+                      book_id:lastNumForBook+1, 
+                      seller_id : req.body.seller_id,
+                      price:req.body.price, 
+                      image_path:req.body.image_path, 
+                      description:req.body.description, 
+                      onSale:false}, function(err, product){
+              if(err) {
+                res.json({result: 'ERROR'});
+              }
+              else {
+                res.json({result: 'CREATE', uid:product.uid});
+              }
+            });
+          });
+        }
+        else {
+          book_id = book.uid
+          Product.create({uid:lastNum+1, 
+                    book_id:book_id, 
+                    seller_id : req.body.seller_id,
+                    price:req.body.price, 
+                    image_path:req.body.image_path, 
+                    description:req.body.description, 
+                    onSale:false}, function(err, product){
+            if(err) {
+              res.json({result: 'ERROR'});
+            }
+            else {
+              res.json({result: 'CREATE', uid:product.uid});
+            }
+          });
+        }
+      });
     });
-  });
-});
-
-//Give image to Product
-router.post("/image", function(req, res){
-  Product.findOne({uid: req.body.uid}, function(err, product){
-    product.image = req.body
-    product.save();
-  });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 //Soldout
-router.put("/soldOut", function(req, res){
-  soldout = req.body.soldout;
-  Product.updateOne({uid:req.body.uid}, {soldout: soldout}, function(err, product){
-    res.json({success: true});
-  });
+router.put("/onSale", function(req, res){
+  try {
+    onSale = req.body.onSale;
+    Product.updateOne({uid:req.body.uid}, {onSale: onSale}, function(err, product){
+      res.json({result: 'CHANGE_ONSALE'});
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 //Change Price
 router.put("/changePrice", function(req, res){
-  Product.updateOne({uid:req.body.uid}, {price: req.body.price}, function(err, product){
-    res.json({success: true});
-  });
+  try{
+    Product.updateOne({uid:req.body.uid}, {price: req.body.price}, function(err, product){
+      res.json({result: 'CHANGE_PRICE'});
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 router.delete("/:uid", function(req, res){
-  Product.remove({uid:req.params.uid}, function(err, product){
-    res.json({success: true});
-  });
+  try {
+    Product.remove({uid:req.params.uid}, function(err, product){
+      res.json({result: 'DELETE'});
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 module.exports = router; 

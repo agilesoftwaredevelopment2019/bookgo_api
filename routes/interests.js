@@ -10,61 +10,77 @@ var qs = require('querystring');
 
 //index
 router.get("", function(req, res){
-  Interest.find({})
-  .sort('-uid')
-  .exec(function (err, interest) {
-    res.json(interest);
-  }); 
+  try{
+    Interest.find({})
+    .sort('-uid')
+    .exec(function (err, interest) {
+      res.json(interest);
+    }); 
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 //show
 router.get("/:user_id", function(req, res){
-  Interest.find({user_id:req.params.user_id}, function(err, interest){
-    if(err)
-    {
-      console.log("err")
-    }
-    else if(!interest)
-    {
-      console.log("notfound")
-    }
-    else
-    {
-      res.json(interest);
-    }
-  });
+  try {
+    Interest.find({user_id:req.params.user_id}, function(err, interest){
+      if(err)
+      {
+        res.json({result: 'ERROR'});
+      }
+      else if(!interest)
+      {
+        res.json({result: 'NOT_FOUND'});
+      }
+      else
+      {
+        res.json(interest);
+      }
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 
 //Create
 router.post("", function(req, res){
-  //get last eid of schedules
-  var lastNum;
-  Interest.findOne({})
-  .sort('-uid')
-  .exec(function (err, interest) {
-    if(!interest){
-      lastNum = 0;
-    }
-    else
-      lastNum = interest.uid;
+  try{
+    //get last eid of schedules
+    var lastNum;
+    Interest.findOne({})
+    .sort('-uid')
+    .exec(function (err, interest) {
+      if(!interest){
+        lastNum = 0;
+      }
+      else
+        lastNum = interest.uid;
 
-    //if not error
-    Interest.create({uid:lastNum+1, user_id:req.body.user_id, book_id:req.body.book_id}, function(err, interest){
-    if(err) {
-      res.json(err.message);
-    }
-    else
-      res.json({create: 'success'});
+      //if not error
+      Interest.create({uid:lastNum+1, user_id:req.body.user_id, book_id:req.body.book_id}, function(err, interest){
+      if(err) {
+        res.json({result: 'ERROR'});
+      }
+      else
+        res.json({create: 'success'});
+      });
     });
-  });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 router.delete("/:user_id/:book_id", function(req, res){
-  //remove products by user
-  Interest.remove({user_id:req.params.user_id, book_id:req.params.book_id}, function(err, interest){
-    res.json({delete: 'success'});
-  });
+  try {
+    Interest.remove({user_id:req.params.user_id, 
+                book_id:req.params.book_id}, function(err, interest){
+      res.json({result: 'DELETE'});
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 

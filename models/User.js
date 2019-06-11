@@ -9,8 +9,7 @@ var UserSchema = mongoose.Schema({
 	password:{type:String, required:[true, "password is required!"]},
 	nickname:{type:String, required:[true, "nickname is required!"]},
 	name:{type:String, required:[true, "name is required!"]},
-	phonenumber:{type:String, required:[true, "phonenumber is required!"]},
-	isAuthenticated:{type:Boolean}
+	phonenumber:{type:String, required:[true, "phonenumber is required!"]}
 });
 
 //model&export

@@ -70,9 +70,9 @@ router.post("", function(req, res){
     //if not error
     Transaction.create({uid:lastNum+1, book_id : req.body.book_id,
                 buyer_id:req.body.buyer_id, seller_id:req.body.seller_id, 
-                price:req.body.price, phonenumber:req.body.phonenumber, 
-                description:req.body.description}, function(err, User){
-      Product.updateOne({uid:req.body.product_uid}, {soldout:true}, function(err, user){
+                price:req.body.price, title:req.body.title,
+                phonenumber:req.body.phonenumber, description:req.body.description}, function(err, transcation){
+      Product.updateOne({uid:req.body.uid}, {soldout:true}, function(err, product){
       });
       if(err) {
         res.json(err.message);

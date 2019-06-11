@@ -9,6 +9,7 @@ var TransactionSchema = mongoose.Schema({
 	buyer_id:{type:Number, required:[true]},
 	seller_id:{type:Number, required:[true]},
 	price:{type:Number, required:[true]},
+	title:{type:String, required:[true]},
 	description:{type:String, required:[false]}
 });
 

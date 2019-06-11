@@ -36,7 +36,7 @@ router.post("/login", function(req, res){
   try{
     User.findOne({idname:req.body.idname, password:req.body.password}, function(err, user){
       if(!user) {
-        res.json({result: 'WRONG PASSWORD'});
+        res.json({result: 'WRONG_PASSWORD'});
       }
     });
   } catch (err) {

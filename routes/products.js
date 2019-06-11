@@ -24,35 +24,32 @@ router.get("", function(req, res){
 //get product data with book data
 router.get("/listWithTitle", async function(req, res){
   try{
-    Product.find({})
+    Product.find({onSale: true})
     .sort('-uid')
     .exec(async function (err, products) {
       result = [];
       for (var i=0; i<products.length; i++){
-        if (products[i].onSale === true) {
-          console.log(products[i]);
-          await Book.findOne({uid:products[i].book_id}, function(err, book){
-            if(err)
-            {
-              res.json({result: 'ERROR'});
-            }
-            else if(!book)
-            {
-              res.json({result: 'NOT_FOUND'});
-            }
-            else
-            {
-              result.push({title: book.title, 
-                      author: book.author,
-                      publisher: book.publisher,
-                      product_id: products[i].uid,
-                      seller_id: products[i].seller_id,
-                      image_path: products[i].image_path,
-                      description: products[i].description,
-                      price: products[i].price});
-            }         
-          });
-        }
+        await Book.findOne({uid:products[i].book_id}, async function(err, book){
+          if(err)
+          {
+            res.json({result: 'ERROR'});
+          }
+          else if(!book)
+          {
+            res.json({result: 'NOT_FOUND'});
+          }
+          else
+          {
+            await result.push({title: book.title, 
+                    author: book.author,
+                    publisher: book.publisher,
+                    product_id: products[i].uid,
+                    seller_id: products[i].seller_id,
+                    image_path: products[i].image_path,
+                    description: products[i].description,
+                    price: products[i].price});
+          }         
+        });
       }
       res.json(result);
     });

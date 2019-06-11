@@ -4,9 +4,6 @@ const express = require('express');
 var router = express.Router();
 var Interest = require('../models/Interest');
 var Product = require('../models/Product');
-var https = require('https');
-var http = require('http');
-var qs = require('querystring');
 
 //index
 router.get("", function(req, res){
@@ -24,18 +21,18 @@ router.get("", function(req, res){
 //show
 router.get("/:user_id", function(req, res){
   try {
-    Interest.find({user_id:req.params.user_id}, function(err, interest){
+    Interest.find({user_id:req.params.user_id}, function(err, interests){
       if(err)
       {
         res.json({result: 'ERROR'});
       }
-      else if(!interest)
+      else if(!interests)
       {
         res.json({result: 'NOT_FOUND'});
       }
       else
       {
-        res.json(interest);
+        res.json(interests);
       }
     });
   } catch (err) {
@@ -59,7 +56,7 @@ router.post("", function(req, res){
         lastNum = interest.uid;
 
       //if not error
-      Interest.create({uid:lastNum+1, user_id:req.body.user_id, book_id:req.body.book_id}, function(err, interest){
+      Interest.create({uid:lastNum+1, user_id:req.body.user_id, book_id:req.body.product_id}, function(err, interest){
       if(err) {
         res.json({result: 'ERROR'});
       }
@@ -72,10 +69,10 @@ router.post("", function(req, res){
   }
 });
 
-router.delete("/:user_id/:book_id", function(req, res){
+router.delete("/:user_id/:product_id", function(req, res){
   try {
     Interest.remove({user_id:req.params.user_id, 
-                book_id:req.params.book_id}, function(err, interest){
+            product_id:req.params.product_id}, function(err, interest){
       res.json({result: 'DELETE'});
     });
   } catch (err) {

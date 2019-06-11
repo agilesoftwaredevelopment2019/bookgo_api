@@ -4,6 +4,8 @@ const express = require('express');
 var router = express.Router();
 var Product = require('../models/Product');
 var Book = require('../models/Book');
+var Interest = require('../models/Interest');
+var Transaction = require('../models/Transaction');
 
 
 //index
@@ -19,15 +21,91 @@ router.get("", function(req, res){
   }
 });
 
-router.get("/lists", async function(req, res){
-  Product.find({soldout:false})
-  .exec(async function (err, product) {
-    products = product.data;
-    for (item in products) {
-      bookId = item.book_id;
-      
-    }
-  });
+router.get("/user_interest/:user_id", async function(req, res){
+  try {
+    Interest.find({user_id:req.params.user_id}, async function(err, interests){
+      if(err){
+        res.json({result: 'ERROR'});
+      } else if (!interests) {
+        res.json({result: 'NOT_FOUND'});
+      } else {
+        result = [];
+        for (var i=0; i<interests.length; i++){
+          await Product.find({uid:interests[i].product_id}, function(err, product){
+            if(err)
+            {
+              res.json({result: 'ERROR'});
+            }
+            else if(!product)
+            {
+              res.json({result: 'NOT_FOUND'});
+            }
+            else
+            {
+              result.push(product);
+            }
+          });
+        }
+        res.json(result);
+      }
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
+});
+
+router.get("/buyer_id/:buyer_id", async function(req, res){
+  try {
+    Transaction.find({buyer_id:req.params.buyer_id}, async function(err, transactions){
+      if(err){
+        res.json({result: 'ERROR'});
+      } else if (!transactions) {
+        res.json({result: 'NOT_FOUND'});
+      } else {
+        result = [];
+        for (var i=0; i<transactions.length; i++){
+          await Product.find({uid:transactions[i].product_id}, function(err, product){
+            if(err)
+            {
+              res.json({result: 'ERROR'});
+            }
+            else if(!product)
+            {
+              res.json({result: 'NOT_FOUND'});
+            }
+            else
+            {
+              result.push(product);
+            }
+          });
+        }
+        res.json(result);
+      }
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
+});
+
+router.get("/seller_id/:seller_id", function(req, res){
+  try {
+    Product.find({seller_id:req.params.seller_id}, function(err, product){
+      if(err)
+      {
+        res.json({result: 'ERROR'});
+      }
+      else if(!product)
+      {
+        res.json({result: 'NOT_FOUND'});
+      }
+      else
+      {
+        res.json(product);
+      }
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
 });
 
 //show 
@@ -72,54 +150,20 @@ router.post("", function(req, res){
       }
       else
         lastNum = product.uid;
-      
-      // find if same book exist by name
-      Book.findOne({title: req.body.title}, function(err, book){
-        if(err){
-          res.json({result: 'ERROR'});
-        }
-        else if(!book){
-          Book.findOne({})
-          .sort('-uid')
-          .exec(function (err, book2) {
-            if(!book) {
-              lastNumForBook = 0;
-            }
-            else
-            lastNumForBook = book2.uid;
-            Product.create({uid:lastNum+1, 
-                      book_id:lastNumForBook+1, 
-                      seller_id : req.body.seller_id,
-                      price:req.body.price, 
-                      image_path:req.body.image_path, 
-                      description:req.body.description, 
-                      onSale:false}, function(err, product){
-              if(err) {
-                res.json({result: 'ERROR'});
-              }
-              else {
-                res.json({result: 'CREATE', uid:product.uid});
-              }
-            });
-          });
-        }
-        else {
-          book_id = book.uid
-          Product.create({uid:lastNum+1, 
-                    book_id:book_id, 
-                    seller_id : req.body.seller_id,
-                    price:req.body.price, 
-                    image_path:req.body.image_path, 
-                    description:req.body.description, 
-                    onSale:false}, function(err, product){
-            if(err) {
-              res.json({result: 'ERROR'});
-            }
-            else {
-              res.json({result: 'CREATE', uid:product.uid});
-            }
-          });
-        }
+
+      //if not error
+      Product.create({uid:lastNum+1, 
+                book_id:req.body.book_id, 
+                seller_id : req.body.seller_id,
+                price:req.body.price, 
+                image_path:req.body.image_path, 
+                description:req.body.description, 
+                onSale:false}, function(err, product){
+      if(err) {
+        res.json({result: 'ERROR'});
+      }
+      else
+        res.json({result: 'CREATE', uid:product.uid});
       });
     });
   } catch (err) {

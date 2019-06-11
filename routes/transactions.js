@@ -4,10 +4,6 @@ const express = require('express');
 var router = express.Router();
 var Transaction = require('../models/Transaction');
 var Product = require('../models/Product');
-var https = require('https');
-var http = require('http');
-var qs = require('querystring');
-
 //index
 router.get("", function(req, res){
   try {
@@ -24,7 +20,7 @@ router.get("", function(req, res){
 //show
 router.get("/buyer_id/:buyer_id", function(req, res){
   try {
-    Transaction.find({idname:req.params.buyer_id}, function(err, transaction){
+    Transaction.find({buyer_id:req.params.buyer_id}, function(err, transaction){
       if(err)
       {
         res.json({result: 'ERROR'});

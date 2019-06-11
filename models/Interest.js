@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 var InterestSchema = mongoose.Schema({
 	uid:{type:Number, required:[true, "id is required!"], unique:true},
 	user_id:{type:Number, required:[true]},
-	book_id:{type:Number, required:[true]}
+	product_id:{type:Number, required:[true]}
 });
 
 //model&export

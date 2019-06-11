@@ -22,20 +22,21 @@ router.get("", function(req, res){
 });
 
 //get product data with book data
-router.get("/listWithBookInfo", async function(req, res){
+router.get("/listWithTitle", async function(req, res){
   try{
     Product.find({})
     .sort('-uid')
-    .exec(async function (err, proudcts) {
+    .exec(async function (err, products) {
       result = [];
-      for (var i=0; i<proudcts.length; i++){
+      for (var i=0; i<products.length; i++){
         if (products[i].onSale === true) {
-          await Book.findOne({uid:proudcts[i].book_id}, function(err, book){
+          console.log(products[i]);
+          await Book.findOne({uid:products[i].book_id}, function(err, book){
             if(err)
             {
               res.json({result: 'ERROR'});
             }
-            else if(!product)
+            else if(!book)
             {
               res.json({result: 'NOT_FOUND'});
             }

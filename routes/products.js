@@ -21,6 +21,46 @@ router.get("", function(req, res){
   }
 });
 
+//get product data with book data
+router.get("/listWithBookInfo", async function(req, res){
+  try{
+    Product.find({})
+    .sort('-uid')
+    .exec(async function (err, proudcts) {
+      result = [];
+      for (var i=0; i<proudcts.length; i++){
+        if (products[i].onSale === true) {
+          await Book.findOne({uid:proudcts[i].book_id}, function(err, book){
+            if(err)
+            {
+              res.json({result: 'ERROR'});
+            }
+            else if(!product)
+            {
+              res.json({result: 'NOT_FOUND'});
+            }
+            else
+            {
+              result.push({title: book.title, 
+                      author: book.author,
+                      publisher: book.publisher,
+                      product_id: products[i].uid,
+                      seller_id: products[i].seller_id,
+                      image_path: products[i].image_path,
+                      description: products[i].description,
+                      price: products[i].price});
+            }         
+          });
+        }
+      }
+      res.json(result);
+    });
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
+})
+
+
 router.get("/user_interest/:user_id", async function(req, res){
   try {
     Interest.find({user_id:req.params.user_id}, async function(err, interests){
@@ -138,7 +178,6 @@ router.get("/:book_name", function(req, res){
   }
 });
 
-//Create without Image
 router.post("", function(req, res){
   try{
     var lastNum;

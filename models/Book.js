@@ -6,8 +6,8 @@ const mongoose = require('mongoose');
 var BookSchema = mongoose.Schema({
 	uid:{type:Number, required:true, unique:true},
 	title:{type:String, required:[true, "Title is required!"]},
-	description:{type:String, required:false},
-	category:{type:String, required:[false]}	
+	author:{type:String, required:false},
+	publisher:{type:String, required:false}
 });
 
 //model&export

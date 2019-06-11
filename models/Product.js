@@ -8,9 +8,7 @@ var ProductSchema = mongoose.Schema({
 	book_id:{type:Number, required:[true]},
 	seller_id:{type:Number, required:[true]},
 	price:{type:Number, required:[true]},
-	soldout:{type:Boolean, required:[true]},
-	phonenumber:{type:String, required:[true]},
-	title:{type:String, required:[true]},
+	onSale:{type:Boolean, required:[true]},
 	description:{type:String, required:[false]}
 });
 

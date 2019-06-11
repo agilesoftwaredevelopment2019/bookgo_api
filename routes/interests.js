@@ -19,14 +19,14 @@ router.get("", function(req, res){
 
 //show
 router.get("/:user_id", function(req, res){
-  Interest.find({idname:req.params.user_id}, function(err, interest){
+  Interest.find({user_id:req.params.user_id}, function(err, interest){
     if(err)
     {
-
+      console.log("err")
     }
-    else if(!user)
+    else if(!interest)
     {
-
+      console.log("notfound")
     }
     else
     {

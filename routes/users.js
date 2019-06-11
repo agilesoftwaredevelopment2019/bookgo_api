@@ -35,9 +35,14 @@ router.get("/idname/:idname", function(req, res){
 router.post("/login", function(req, res){
   try{
     User.findOne({idname:req.body.idname, password:req.body.password}, function(err, user){
-      if(!user) {
+      if(err) {
+        res.json({result: 'ERROR'});
+      } else if (!user) {
         res.json({result: 'WRONG_PASSWORD'});
+      } else {
+        res.json(user);
       }
+
     });
   } catch (err) {
     res.json({result: 'ERROR'});

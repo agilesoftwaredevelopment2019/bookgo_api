@@ -158,7 +158,7 @@ router.post("", function(req, res){
                 price:req.body.price, 
                 image_path:req.body.image_path, 
                 description:req.body.description, 
-                onSale:false}, function(err, product){
+                onSale:true}, function(err, product){
       if(err) {
         res.json({result: 'ERROR'});
       }

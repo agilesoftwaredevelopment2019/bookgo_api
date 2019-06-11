@@ -81,7 +81,7 @@ router.post("", function(req, res){
                   price:req.body.price, 
                   message:req.body.message,
                   phonenumber:req.body.phonenumber}, function(err, transcation){
-        Product.updateOne({uid:req.body.product_id}, {onSale:true}, function(err, product){
+        Product.updateOne({uid:req.body.product_id}, {onSale:false}, function(err, product){
           if(err) {
             res.json({result: 'ERROR'});
           }

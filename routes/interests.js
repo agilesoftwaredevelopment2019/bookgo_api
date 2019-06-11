@@ -41,6 +41,8 @@ router.get("/:user_id", function(req, res){
 });
 
 
+
+
 //Create
 router.post("", function(req, res){
   try{
@@ -56,7 +58,7 @@ router.post("", function(req, res){
         lastNum = interest.uid;
 
       //if not error
-      Interest.create({uid:lastNum+1, user_id:req.body.user_id, book_id:req.body.product_id}, function(err, interest){
+      Interest.create({uid:lastNum+1, user_id:req.body.user_id, product_id:req.body.product_id}, function(err, interest){
       if(err) {
         res.json({result: 'ERROR'});
       }

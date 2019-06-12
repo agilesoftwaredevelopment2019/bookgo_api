@@ -21,37 +21,44 @@ router.get("", function(req, res){
   }
 });
 
+async function getBookInfo (product) {
+  try {
+    let bookInfo = await Book.find({uid:product.book_id});  
+    return ({title: bookInfo.title, 
+      author: bookInfo.author,
+      publisher: bookInfo.publisher,
+      product_id: product.uid,
+      seller_id: product.seller_id,
+      image_path: product.image_path,
+      description: product.description,
+      price: product.price});
+  } catch (err) {
+    res.json({result: 'ERROR'});
+  }
+};
+
 //get product data with book data
 router.get("/listWithTitle", async function(req, res){
   try{
-    Product.find({onSale: true})
-    .sort('-uid')
-    .exec(async function (err, products) {
-      result = [];
+    let items = []
+    let item;
+    Product.find({onSale: true}, async function (err, products) {
       for (var i=0; i<products.length; i++){
-        await Book.findOne({uid:products[i].book_id}, async function(err, book){
-          if(err)
-          {
-            res.json({result: 'ERROR'});
-          }
-          else if(!book)
-          {
-            res.json({result: 'NOT_FOUND'});
-          }
-          else
-          {
-            await result.push({title: book.title, 
-                    author: book.author,
-                    publisher: book.publisher,
-                    product_id: products[i].uid,
-                    seller_id: products[i].seller_id,
-                    image_path: products[i].image_path,
-                    description: products[i].description,
-                    price: products[i].price});
-          }         
-        });
+        product = products[i];
+        bookInfo = await Book.findOne({uid:product.book_id});
+        item = {title: bookInfo.title, 
+          author: bookInfo.author,
+          publisher: bookInfo.publisher,
+          product_id: product.uid,
+          seller_id: product.seller_id,
+          image_path: product.image_path,
+          description: product.description,
+          price: product.price};
+        items.push(item);
+        if (i === products.length - 1) {
+          res.json(items);
+        }
       }
-      res.json(result);
     });
   } catch (err) {
     res.json({result: 'ERROR'});
@@ -69,7 +76,7 @@ router.get("/user_interest/:user_id", async function(req, res){
       } else {
         result = [];
         for (var i=0; i<interests.length; i++){
-          await Product.find({uid:interests[i].product_id}, function(err, product){
+          await Product.findOne({uid:interests[i].product_id}, function(err, product){
             if(err)
             {
               res.json({result: 'ERROR'});
@@ -83,8 +90,10 @@ router.get("/user_interest/:user_id", async function(req, res){
               result.push(product);
             }
           });
+          if (i === interests.length - 1) {
+            res.json(items);
+          }
         }
-        res.json(result);
       }
     });
   } catch (err) {

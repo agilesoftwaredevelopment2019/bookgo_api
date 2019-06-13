@@ -91,7 +91,7 @@ router.get("/user_interest/:user_id", async function(req, res){
   }
 });
 
-router.get("/buyer_id/:buyer_id", async function(req, res){
+router.get("/buyer_id/:buyer_id", function(req, res){
   try {
     Transaction.find({buyer_id:req.params.buyer_id}, async function(err, transactions){
       if(err){
@@ -100,8 +100,10 @@ router.get("/buyer_id/:buyer_id", async function(req, res){
         res.json({result: 'NOT_FOUND'});
       } else {
         result = [];
+        let items = []
+        let item;
         for (var i=0; i<transactions.length; i++){
-          await Product.find({uid:transactions[i].product_id}, function(err, product){
+          await Product.findOne({uid:transactions[i].product_id}, async function(err, product){
             if(err)
             {
               res.json({result: 'ERROR'});
@@ -112,7 +114,16 @@ router.get("/buyer_id/:buyer_id", async function(req, res){
             }
             else
             {
-              result.push(product);
+              bookInfo = await Book.findOne({uid:product.book_id});
+              item = {title: bookInfo.title, 
+                author: bookInfo.author,
+                publisher: bookInfo.publisher,
+                product_id: product.uid,
+                seller_id: product.seller_id,
+                image_path: product.image_path,
+                description: product.description,
+                price: product.price};
+              result.push(item);
             }
           });
         }
@@ -126,18 +137,32 @@ router.get("/buyer_id/:buyer_id", async function(req, res){
 
 router.get("/seller_id/:seller_id", function(req, res){
   try {
-    Product.find({seller_id:req.params.seller_id}, function(err, product){
+    let items = []
+    let item;
+    Product.find({seller_id:req.params.seller_id}, async function(err, products){
       if(err)
       {
         res.json({result: 'ERROR'});
       }
-      else if(!product)
+      else if(!products)
       {
         res.json({result: 'NOT_FOUND'});
       }
-      else
-      {
-        res.json(product);
+      for (var i=0; i<products.length; i++){
+        product = products[i];
+        bookInfo = await Book.findOne({uid:product.book_id});
+        item = {title: bookInfo.title, 
+          author: bookInfo.author,
+          publisher: bookInfo.publisher,
+          product_id: product.uid,
+          seller_id: product.seller_id,
+          image_path: product.image_path,
+          description: product.description,
+          price: product.price};
+        items.push(item);
+        if (i === products.length - 1) {
+          res.json(items);
+        }
       }
     });
   } catch (err) {

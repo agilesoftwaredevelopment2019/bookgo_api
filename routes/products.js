@@ -21,22 +21,6 @@ router.get("", function(req, res){
   }
 });
 
-async function getBookInfo (product) {
-  try {
-    let bookInfo = await Book.find({uid:product.book_id});  
-    return ({title: bookInfo.title, 
-      author: bookInfo.author,
-      publisher: bookInfo.publisher,
-      product_id: product.uid,
-      seller_id: product.seller_id,
-      image_path: product.image_path,
-      description: product.description,
-      price: product.price});
-  } catch (err) {
-    res.json({result: 'ERROR'});
-  }
-};
-
 //get product data with book data
 router.get("/listWithTitle", async function(req, res){
   try{
@@ -68,13 +52,13 @@ router.get("/listWithTitle", async function(req, res){
 
 router.get("/user_interest/:user_id", async function(req, res){
   try {
+    let items = []
     Interest.find({user_id:req.params.user_id}, async function(err, interests){
       if(err){
         res.json({result: 'ERROR'});
       } else if (!interests) {
         res.json({result: 'NOT_FOUND'});
       } else {
-        result = [];
         for (var i=0; i<interests.length; i++){
           await Product.findOne({uid:interests[i].product_id}, function(err, product){
             if(err)
@@ -87,12 +71,13 @@ router.get("/user_interest/:user_id", async function(req, res){
             }
             else
             {
-              result.push(product);
+              console.log(product);
+              items.push(product);
+              if (i === interests.length - 1) {
+                res.json(items);
+              }
             }
           });
-          if (i === interests.length - 1) {
-            res.json(items);
-          }
         }
       }
     });

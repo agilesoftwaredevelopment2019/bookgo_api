@@ -41,7 +41,7 @@ router.get("/buyer_id/:buyer_id", function(req, res){
 
 router.get("/seller_id/:seller_id", function(req, res){
   try {
-    Transaction.find({idname:req.params.seller_id}, function(err, transaction){
+    Transaction.find({seller_id:req.params.seller_id}, function(err, transaction){
       if(err)
       {
         res.json({result: 'ERROR'});

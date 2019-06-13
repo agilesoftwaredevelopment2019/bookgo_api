@@ -69,7 +69,6 @@ router.post("", function(req, res){
                   nickname:req.body.nickname,
                   name:req.body.name, 
                   phonenumber:req.body.phonenumber}, function(err, user){
-        console.log(user)
         res.json({result: 'CREATE'});
       });
     });

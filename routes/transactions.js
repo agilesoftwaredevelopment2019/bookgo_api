@@ -61,12 +61,12 @@ router.get("/seller_id/:seller_id", function(req, res){
 });
 
 //Create
-router.post("", function(req, res){
+router.post("", async function(req, res){
   try {
     var lastNum;
     Transaction.findOne({})
     .sort('-uid')
-    .exec(function (err, transaction) {
+    .exec(async function (err, transaction) {
       if(!transaction){
         lastNum = 0;
       }
@@ -80,14 +80,13 @@ router.post("", function(req, res){
                   seller_id:req.body.seller_id, 
                   price:req.body.price, 
                   message:req.body.message,
-                  phonenumber:req.body.phonenumber}, function(err, transcation){
-        Product.updateOne({uid:req.body.product_id}, {onSale:false}, function(err, product){
-          if(err) {
-            res.json({result: 'ERROR'});
-          }
-          else
-            res.json({result: 'CREATE'});
-        });
+                  phonenumber:req.body.phonenumber}, function(err, transaction){
+        productResponse = await Product.updateOne({uid:req.body.product_id}, {onSale:false});
+        if(err) {
+          res.json({result: 'ERROR'});
+        }
+        else
+          res.json({result: 'CREATE'});
       });
     });
   } catch (err) {

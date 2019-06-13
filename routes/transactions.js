@@ -81,15 +81,17 @@ router.post("", function(req, res){
                   price:req.body.price, 
                   message:req.body.message,
                   phonenumber:req.body.phonenumber});
-      console.log(transaction_response);
-      productResponse = await Product.updateOne({uid:req.body.product_id}, {onSale:false});
-      console.log(productResponse);
-      if(err) {
+      if (transaction_response){
+        productResponse = await Product.updateOne({uid:req.body.product_id}, {onSale:false});  
+        if (productResponse){
+          res.json({result: 'CREATE'});  
+        }
+        else {
+          res.json({result: 'ERROR'});
+        }
+      } else {
         res.json({result: 'ERROR'});
       }
-      else
-        res.json({result: 'CREATE'});
-      
     });
   } catch (err) {
     res.json({result: 'ERROR'});

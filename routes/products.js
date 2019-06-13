@@ -27,8 +27,8 @@ router.get("/listWithTitle", async function(req, res){
     let items = []
     let item;
     Product.find({onSale: true}, async function (err, products) {
-      if(products.length === 0){
-        res.json('');
+      if(!products){
+        res.json({result: 'NOT_FOUND'});
       }
       for (var i=0; i<products.length; i++){
         product = products[i];

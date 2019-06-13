@@ -101,34 +101,30 @@ router.get("/buyer_id/:buyer_id", function(req, res){
         res.json({result: 'NOT_FOUND'});
       } else {
         result = [];
-        let items = []
         let item;
         for (var i=0; i<transactions.length; i++){
-          await Product.findOne({uid:transactions[i].product_id}, async function(err, product){
-            if(err)
-            {
-              res.json({result: 'ERROR'});
-            }
-            else if(!product)
-            {
-              res.json({result: 'NOT_FOUND'});
-            }
-            else
-            {
-              bookInfo = await Book.findOne({uid:product.book_id});
-              item = {title: bookInfo.title, 
-                author: bookInfo.author,
-                publisher: bookInfo.publisher,
-                product_id: product.uid,
-                seller_id: product.seller_id,
-                image_path: product.image_path,
-                description: product.description,
-                price: product.price};
-              result.push(item);
-            }
-          });
+          console.log(transactions[i]);
+          product = await Product.findOne({uid:transactions[i].product_id});
+          if (product.length === 0){
+            console.log("null");
+          }
+          else {
+            bookInfo = await Book.findOne({uid:product.book_id});
+            console.log(bookInfo);
+            item = {title: bookInfo.title, 
+              author: bookInfo.author,
+              publisher: bookInfo.publisher,
+              product_id: product.uid,
+              seller_id: product.seller_id,
+              image_path: product.image_path,
+              description: product.description,
+              price: product.price};
+            result.push(item);
+          }
+          if (i === transactions.length - 1) {
+            res.json(result);
+          }
         }
-        res.json(result);
       }
     });
   } catch (err) {

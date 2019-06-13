@@ -27,6 +27,7 @@ router.get("/listWithTitle", async function(req, res){
     let items = []
     let item;
     Product.find({onSale: true}, async function (err, products) {
+      console.log(products);
       if(products.length === 0){
         res.json({result: 'NOT_FOUND'});
       }
@@ -60,7 +61,7 @@ router.get("/user_interest/:user_id", async function(req, res){
     Interest.find({user_id:req.params.user_id}, async function(err, interests){
       if(err){
         res.json({result: 'ERROR'});
-      } else if (!interests) {
+      } else if (interests.length === 0) {
         res.json({result: 'NOT_FOUND'});
       } else {
         for (var i=0; i<interests.length; i++){
@@ -96,7 +97,7 @@ router.get("/buyer_id/:buyer_id", function(req, res){
     Transaction.find({buyer_id:req.params.buyer_id}, async function(err, transactions){
       if(err){
         res.json({result: 'ERROR'});
-      } else if (!transactions) {
+      } else if (transactions.length === 0) {
         res.json({result: 'NOT_FOUND'});
       } else {
         result = [];
@@ -144,7 +145,7 @@ router.get("/seller_id/:seller_id", function(req, res){
       {
         res.json({result: 'ERROR'});
       }
-      else if(!products)
+      else if(products.length === 0)
       {
         res.json({result: 'NOT_FOUND'});
       }

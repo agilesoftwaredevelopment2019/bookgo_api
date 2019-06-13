@@ -53,6 +53,7 @@ router.get("/listWithTitle", async function(req, res){
 router.get("/user_interest/:user_id", async function(req, res){
   try {
     let items = []
+    let item;
     Interest.find({user_id:req.params.user_id}, async function(err, interests){
       if(err){
         res.json({result: 'ERROR'});
@@ -60,24 +61,25 @@ router.get("/user_interest/:user_id", async function(req, res){
         res.json({result: 'NOT_FOUND'});
       } else {
         for (var i=0; i<interests.length; i++){
-          await Product.findOne({uid:interests[i].product_id}, function(err, product){
-            if(err)
-            {
-              res.json({result: 'ERROR'});
-            }
-            else if(!product)
-            {
-              res.json({result: 'NOT_FOUND'});
-            }
-            else
-            {
-              console.log(product);
-              items.push(product);
-              if (i === interests.length - 1) {
-                res.json(items);
-              }
-            }
-          });
+          product = await Product.findOne({uid:interests[i].product_id, onSale:true});
+          if (product === null){
+            console.log("null");
+          }
+          else {
+            bookInfo = await Book.findOne({uid:product.book_id});
+            item = {title: bookInfo.title, 
+              author: bookInfo.author,
+              publisher: bookInfo.publisher,
+              product_id: product.uid,
+              seller_id: product.seller_id,
+              image_path: product.image_path,
+              description: product.description,
+              price: product.price};
+            items.push(item);
+          }
+          if (i === interests.length - 1) {
+            res.json(items);
+          }
         }
       }
     });

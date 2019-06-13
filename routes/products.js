@@ -146,9 +146,10 @@ router.get("/seller_id/:seller_id", function(req, res){
 });
 
 //show 
-router.get("/:book_name", function(req, res){
+router.get("/title/:title", function(req, res){
   try {
-    Book.findOne({title:book_name}, function(err, book){
+    let decoded_title = decodeURIComponent(req.params.title)
+    Book.findOne({title:decoded_title}, function(err, book){
       if(err){
         res.json({result: 'ERROR'});
       }
@@ -157,15 +158,30 @@ router.get("/:book_name", function(req, res){
       }
       else{
         finding_book_id = book.uid;
-        Product.find({book_id:finding_book_id, soldout:false}, function(err, user){
+        title = book.title;
+        author = book.author;
+        publisher = book.publisher;
+        Product.find({book_id:finding_book_id, onSale:true}, function(err, products){
         if(err){
           res.json({result: 'ERROR'});
         }
-        else if(!user){
+        else if(!products){
           res.json({result: 'NOT_FOUND'});
         }
         else{
-          res.json(user);
+          items = []
+          for (var i=0; i<products.length; i++){
+            item = {title: title, 
+              author: author,
+              publisher: publisher,
+              product_id: products[i].uid,
+              seller_id: products[i].seller_id,
+              image_path: products[i].image_path,
+              description: products[i].description,
+              price: products[i].price};
+            items.push(item);
+          }
+          res.json(items);
         }
         });
       }

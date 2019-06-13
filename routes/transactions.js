@@ -61,7 +61,7 @@ router.get("/seller_id/:seller_id", function(req, res){
 });
 
 //Create
-router.post("", async function(req, res){
+router.post("", function(req, res){
   try {
     var lastNum;
     Transaction.findOne({})
@@ -74,20 +74,20 @@ router.post("", async function(req, res){
         lastNum = transaction.uid;
   
       //if not error
-      Transaction.create({uid:lastNum+1, 
+      transaction_response = await Transaction.create({uid:lastNum+1, 
                   product_id: req.body.product_id,
                   buyer_id:req.body.buyer_id, 
                   seller_id:req.body.seller_id, 
                   price:req.body.price, 
                   message:req.body.message,
-                  phonenumber:req.body.phonenumber}, function(err, transaction){
-        productResponse = await Product.updateOne({uid:req.body.product_id}, {onSale:false});
-        if(err) {
-          res.json({result: 'ERROR'});
-        }
-        else
-          res.json({result: 'CREATE'});
-      });
+                  phonenumber:req.body.phonenumber});
+      productResponse = await Product.updateOne({uid:req.body.product_id}, {onSale:false});
+      if(err) {
+        res.json({result: 'ERROR'});
+      }
+      else
+        res.json({result: 'CREATE'});
+      
     });
   } catch (err) {
     res.json({result: 'ERROR'});

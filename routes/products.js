@@ -136,7 +136,7 @@ router.get("/seller_id/:seller_id", function(req, res){
   try {
     let items = []
     let item;
-    Product.find({seller_id:req.params.seller_id}, async function(err, products){
+    Product.find({seller_id:req.params.seller_id, onSale: true}, async function(err, products){
       if(err)
       {
         res.json({result: 'ERROR'});
